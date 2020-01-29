@@ -49,23 +49,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        CloseableHttpClient httpClient = HttpClients.createDefault();
-//        System.out.println("Hello World");
-//        HttpGet request = new HttpGet("https://gps.sctpiasi.ro/json");
-//        CloseableHttpResponse response = httpClient.execute(request);
-//        System.out.println(response.getStatusLine().getStatusCode());
-//        HttpEntity entity = response.getEntity();
-//        String responseString = EntityUtils.toString(entity);
-//        System.out.println(responseString);
-
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        LatLng somewhere = new LatLng(47.9,27.35);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.addMarker(new MarkerOptions().position(somewhere).title("MyPoint"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(somewhere));
         List<Bus> listBus = null;
         try {
             listBus=run();
@@ -73,8 +58,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
         for(Bus b:listBus) {
-            mMap.addMarker(new MarkerOptions().position(new LatLng(b.getVehicleLat(),b.vehicleLong)).title(b.getVehicleName()+" "+b.getVehicleDate()));
+
+            if(b.vehicleLat!=null&&b.vehicleLong!=null&&b.vehicleLong!=""&&b.vehicleLat!=""&&!b.vehicleLat.isEmpty()&&!b.vehicleLong.isEmpty()) {
+                System.out.println("Vehicle name= "+b.getVehicleName()+"; Vehicle Lat= "+b.getVehicleLat()+"; Vehicle Long= "+b.getVehicleLong());
+                mMap.addMarker(new MarkerOptions().position(
+                        new LatLng(
+                                Double.parseDouble(b.vehicleLat),
+                                Double.parseDouble(b.vehicleLong))
+                ).title(b.getVehicleName() + " " +
+                        b.getVehicleDate()));
+            }
         }
+        // Add a marker Home and move the camera
+        LatLng home = new LatLng(47.173946,27.541889);
+        mMap.addMarker(new MarkerOptions().position(home).title("Home"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(home));
+
     }
 
     private final OkHttpClient client = new OkHttpClient();
@@ -100,8 +99,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for(int i =0; i<myArray.length();i++) {
             JSONObject bus = myArray.getJSONObject(i);
             busList.add(new Bus(bus.getString("vehicleName"),
-                    bus.getDouble("vehicleLat"),
-                    bus.getDouble("vehicleLong"),
+                    bus.getString("vehicleLat"),
+                    bus.getString("vehicleLong"),
                     bus.getString("vehicleDate")));
         }
         return busList;

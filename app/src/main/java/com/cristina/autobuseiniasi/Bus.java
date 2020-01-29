@@ -2,11 +2,11 @@ package com.cristina.autobuseiniasi;
 
 public class Bus {
     String vehicleName;
-    Double vehicleLat;
-    Double vehicleLong;
+    String vehicleLat;
+    String vehicleLong;
     String vehicleDate;
 
-    public Bus(String vehicleName, Double vehicleLat, Double vehicleLong, String vehicleDate) {
+    public Bus(String vehicleName, String vehicleLat, String vehicleLong, String vehicleDate) {
         this.vehicleName = vehicleName;
         this.vehicleLat = vehicleLat;
         this.vehicleLong = vehicleLong;
@@ -17,11 +17,11 @@ public class Bus {
         return vehicleName;
     }
 
-    public Double getVehicleLat() {
+    public String getVehicleLat() {
         return vehicleLat;
     }
 
-    public Double getVehicleLong() {
+    public String getVehicleLong() {
         return vehicleLong;
     }
 
